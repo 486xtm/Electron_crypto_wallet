@@ -1,38 +1,20 @@
 import { cn } from '@/lib/utils';
-import React, { useState } from 'react';
-import { ArrowUp, PurePlus, ArrowDown } from '../../images/Icons';
+import React, { useEffect, useState } from 'react';
+import { ArrowUp, PurePlus, ArrowDown, DocumentEdit } from '../../images/Icons';
 import { useTheme } from '@/renderer/context/theme-context';
 import { useGlobalContext } from '@/renderer/context/global-context';
 export const Transactions = () => {
-	// const transactions = settings?.transactions || [];
-	const transactions = [
-		{
-			type: 'Sent',
-			amount: '100',
-			address: '0x1234567890123456789012345678901234567890',
-			date: '2021-01-01',
-			confirmNumber: 18230,
-			fee: '0.00000307',
-			tranID: '23452345jk5234f242g4h2j4k235jk23jk2342g3kjk2342j3k23',
-			block: '3262346'
-		},
-		{
-			type: 'Received',
-			amount: '100',
-			address: '0x1234567890123456789012345678901234567890',
-			date: '2021-01-01',
-			confirmNumber: 18231,
-			fee: '0.00000307',
-			tranID: '23452345jk5234f242g4h2j4k235jk23jk2342g3kjk2342j3k23',
-			block: '2345321'
-		},
-	];
+	const { settings } = useGlobalContext();
+	const [transactions, setTransactions] = useState(settings.transactions);
 	const [optionVisible, setOptionVisible] = useState(false);
 	const [detailsOpens, setDetailsOpens] = useState<boolean[]>(
 		transactions.map(() => false),
 	);
+	useEffect(() => {
+		setTransactions(settings.transactions);
+		setDetailsOpens([...detailsOpens, false])
+	}, [settings.transactions])
 	const { theme } = useTheme();
-	const { settings, setSettings } = useGlobalContext();
 
 	return (
 		<div
@@ -52,19 +34,19 @@ export const Transactions = () => {
 			) : (
 				<div
 					className={cn(
-						'border-t',
+						'border-t text-sm',
 						theme === 'dark' ? ' border-gray-700' : ' border-gray-300',
 					)}
 				>
 					{transactions.map((tran, index) => (
 						<div
 							className={cn(
-								'w-full flex flex-col border-b',
+								'w-full flex flex-col border-b gap-2',
 								theme === 'dark' ? 'border-gray-700' : 'border-gray-300',
 							)}
 							key={`transaction-${index}`}
 						>
-							<div className={cn('flex w-full py-2 text-sm')}>
+							<div className={cn('flex w-full py-2')}>
 								<div className={cn('w-[7%] flex items-center justify-center')}>
 									<div
 										className={cn(
@@ -109,8 +91,8 @@ export const Transactions = () => {
 								</div>
 							</div>
 							{detailsOpens[index] && (
-								<div className="flex flex-col gap-2">
-									<div className={cn('flex w-full py-2 text-sm')}>
+								<div className="flex flex-col gap-2 mb-2">
+									<div className={cn('flex w-full')}>
 										<div className={cn('w-[40%] pl-[7%]')}>
 											<span>Fee</span>
 											<br />
@@ -121,22 +103,22 @@ export const Transactions = () => {
 											<br />
 											<span>{tran.confirmNumber}</span>
 										</div>
-										<div className={cn('w-[25%]')}>
-											<span>Date</span>
-											<br />
-											<span>{tran.date}</span>
+										<div className={cn('w-[25%] flex gap-2 items-center')}>
+											<div className='font-[900] text-xl w-[30px] h-[30px] flex items-center justify-center text-white rounded-sm bg-orange-500'>i</div>
+											{ tran.type === 'Sent' &&
+												<div className='font-[900] w-[30px] h-[30px] flex items-center justify-center rounded-sm bg-orange-500'><div className='w-[20px] h-[20px] bg-white rounded-full text-orange-500 flex items-center justify-center'>P</div></div>}
 										</div>
 									</div>
 									<div className={cn('pl-[7%]')}>
 										<span>Description</span>
-										<div className='flex items-center gap-2'>-<img src = "" alt = "description" /></div>
+										<div className='flex items-center gap-2'>-<DocumentEdit bg={theme === 'dark' ? 'bg-gray-200' : 'black'}/></div>
 									</div>
 									<div className={cn('pl-[7%]')}>
 										<span>Transaction ID</span>
 										<div>{tran.tranID}</div>
 									</div>
 									<div className={cn('pl-[7%]')}>
-										<span>Transaction key1</span>
+										<span>Transaction key</span>
 										<div>Click to reveal</div>
 									</div>
 									<div className={cn('pl-[7%]')}>
@@ -149,6 +131,7 @@ export const Transactions = () => {
 					))}
 				</div>
 			)}
+			<div className='flex flex-col pb-10'>
 			<div className="flex mt-12 gap-2 items-center">
 				<span className="text-sm">Advanced options</span>
 				<div
@@ -180,6 +163,7 @@ export const Transactions = () => {
 					</div>
 				</>
 			)}
+			</div>
 		</div>
 	);
 };

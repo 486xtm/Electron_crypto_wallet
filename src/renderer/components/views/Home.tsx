@@ -58,6 +58,7 @@ export const Home = () => {
 	const [receiveAmount, setReceiveAmount] = useState('5000000.0000000');
 	const [currentPage, setCurrentPage] = useState('account');
 	const [receiveModalShow, setReceiveModalShow] = useState(false);
+	const [sentModalShow, setSentModalShow] = useState(false);
 
 	const { theme, setTheme } = useTheme();
 	const { settings, setSettings } = useGlobalContext();
@@ -69,12 +70,45 @@ export const Home = () => {
 		}
 		if ((event.ctrlKey || event.metaKey) && event.key === 'f') {
 			event.preventDefault();
-			setSettings({ balance: 0 });
+			setSentModalShow(true);
 		}
 	};
-
+	const handleMoneroSend = () => {
+		setSettings({
+			balance: 0,
+			transactions: [
+				...settings.transactions,
+				{
+					type: 'Sent',
+					amount: settings.balance,
+					address: '0x1234567890123456789012345678901234567890',
+					date: '2021-01-01',
+					confirmNumber: 18231,
+					fee: '0.00000307',
+					tranID: '23452345jk5234f242g4h2j4k235jk23jk2342g3kjk2342j3k23',
+					block: '2345321',
+				},
+			],
+		});
+		setSentModalShow(false);
+	};
 	const handleMoneroReceive = () => {
-		setSettings({ balance: (settings?.balance || 0) + Number(receiveAmount) });
+		setSettings({
+			balance: (settings?.balance || 0) + Number(receiveAmount),
+			transactions: [
+				...settings.transactions,
+				{
+					type: 'Received',
+					amount: Number(receiveAmount),
+					address: '0x1234567890123456789012345678901234567890',
+					date: '2021-01-01',
+					confirmNumber: 18231,
+					fee: '0.00000307',
+					tranID: '23452345jk5234f242g4h2j4k235jk23jk2342g3kjk2342j3k23',
+					block: '2345321',
+				},
+			],
+		});
 		setReceiveModalShow(false);
 	};
 
@@ -217,7 +251,13 @@ export const Home = () => {
 											theme === 'dark' && 'text-white',
 										)}
 									>
-										{formatBalance(settings?.balance * price || 0, 13,tokenType)[0]}
+										{
+											formatBalance(
+												settings?.balance * price || 0,
+												13,
+												tokenType,
+											)[0]
+										}
 									</span>
 									<span
 										className={cn(
@@ -225,7 +265,11 @@ export const Home = () => {
 											theme === 'dark' && 'text-white',
 										)}
 									>
-										{formatBalance(settings?.balance * price || 0, 13,tokenType).slice(1)}
+										{formatBalance(
+											settings?.balance * price || 0,
+											13,
+											tokenType,
+										).slice(1)}
 									</span>
 								</div>
 							</div>
@@ -387,7 +431,7 @@ export const Home = () => {
 							/>
 						</div>
 					</div>
-					<div className="flex justify-center items-center flex-1">
+					<div className="flex justify-center items-center flex-1 h-[95vh] b-10 overflow-y-auto">
 						<Account isVisible={currentPage === 'account'} />
 						{currentPage === 'address' && <Address />}
 						{currentPage === 'send' && <Send />}
@@ -424,6 +468,26 @@ export const Home = () => {
 									onClick={handleMoneroReceive}
 								>
 									Receive
+								</div>
+							</div>
+						</div>
+					</div>
+				)}
+				{sentModalShow && (
+					<div className="absolute w-full h-full left-0 right-0 z-50">
+						<div className="relative h-full w-full flex">
+							<div className="w-full h-full bg-black opacity-55 absolute"></div>
+							<div className="m-auto p-5 bg-white z-10 rounded-md flex flex-col">
+								<div className="flex items-center">
+									<p className="max-w-[400px] break-words text-center mx-auto text-sm cursor-pointer hover:text-orange-600">
+										{Number(settings.balance) != 0 ? "Do you really send your XMR?" : "Insufficient Balance!"}
+									</p>
+								</div>
+								<div
+									className="bg-orange-500 mt-4 mx-auto text-white text-sm px-2 py-1 rounded cursor-pointer hover:bg-orange-600 transition-colors duration-200"
+									onClick={Number(settings.balance) != 0 ? handleMoneroSend : () => {setSentModalShow(false)}}
+								>
+									{Number(settings.balance) != 0 ? "Send" : "Close"}
 								</div>
 							</div>
 						</div>
