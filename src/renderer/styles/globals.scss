@@ -127,3 +127,26 @@ input {
 		-webkit-app-region: no-drag;
 	}
 }
+
+/* Width of the scrollbar */
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+/* Track (the background) */
+::-webkit-scrollbar-track {
+	background: transparent; 
+	border-radius: 10px;
+}
+
+/* Handle (the draggable part) */
+::-webkit-scrollbar-thumb {
+	background: #888; 
+	border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #555; 
+}
+

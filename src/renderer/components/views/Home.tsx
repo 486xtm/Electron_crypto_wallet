@@ -9,6 +9,8 @@ import {
 	LogOutIcon,
 	ConnectIcon,
 } from '../images/Icons';
+import { FaAngleRight } from 'react-icons/fa6';
+import { generateWalletAddress,generateTransactionID, generateBlockNum, generateConfirmNum } from '@/renderer/lib/utls';
 import { __assets } from '@/main/paths';
 import { PROTOCOL } from '@/config/config';
 import { useTheme } from '@/renderer/context/theme-context';
@@ -77,17 +79,17 @@ export const Home = () => {
 		setSettings({
 			balance: 0,
 			transactions: [
-				...settings.transactions,
 				{
 					type: 'Sent',
 					amount: settings.balance,
-					address: '0x1234567890123456789012345678901234567890',
-					date: '2021-01-01',
-					confirmNumber: 18231,
+					address: generateWalletAddress(),
+					date: Date.now(),
+					confirmNumber: generateConfirmNum(),
 					fee: '0.00000307',
-					tranID: '23452345jk5234f242g4h2j4k235jk23jk2342g3kjk2342j3k23',
-					block: '2345321',
+					tranID: generateTransactionID(),
+					block: generateBlockNum(),
 				},
+				...settings.transactions,
 			],
 		});
 		setSentModalShow(false);
@@ -96,17 +98,17 @@ export const Home = () => {
 		setSettings({
 			balance: (settings?.balance || 0) + Number(receiveAmount),
 			transactions: [
-				...settings.transactions,
 				{
 					type: 'Received',
 					amount: Number(receiveAmount),
-					address: '0x1234567890123456789012345678901234567890',
-					date: '2021-01-01',
-					confirmNumber: 18231,
+					address: generateWalletAddress(),
+					date: Date.now(),
+					confirmNumber: generateConfirmNum(),
 					fee: '0.00000307',
-					tranID: '23452345jk5234f242g4h2j4k235jk23jk2342g3kjk2342j3k23',
-					block: '2345321',
+					tranID: generateTransactionID(),
+					block: generateBlockNum(),
 				},
+				...settings.transactions,
 			],
 		});
 		setReceiveModalShow(false);
@@ -289,7 +291,7 @@ export const Home = () => {
 							>
 								<div
 									className={cn(
-										'py-3 px-2 border-t text-sm font-bold',
+										'py-3 px-2 border-t text-sm font-bold flex items-center justify-between',
 										'text-gray-600 border-l-2 border-l-transparent',
 										theme === 'dark' && 'text-white border-t-[#2f2f2f]',
 										currentPage === 'account' && 'border-l-[#6E513C]',
@@ -297,11 +299,12 @@ export const Home = () => {
 									onClick={() => setCurrentPage('account')}
 								>
 									Account
+									<FaAngleRight />
 								</div>
 							</div>
 							<div
 								className={cn(
-									'pl-5 relative z-10',
+									'pl-5 relative z-10 ',
 									theme === 'dark' && 'text-white',
 									theme === 'dark' ? 'bg-[#181818]' : 'bg-gray-100',
 									currentPage === 'send'
@@ -316,18 +319,18 @@ export const Home = () => {
 							>
 								<div
 									className={cn(
-										'py-3 px-2 border-t text-sm font-bold border-l-2 border-l-transparent',
+										'py-3 px-2 border-t text-sm font-bold border-l-2 border-l-transparent flex items-center justify-between',
 										'text-gray-600',
 										theme === 'dark' && 'text-white border-t-[#2f2f2f]',
 										currentPage === 'send' && 'border-l-[#6E513C]',
 									)}
 								>
-									Send
+									Send <FaAngleRight/>
 								</div>
 							</div>
 							<div
 								className={cn(
-									'pl-5 -z-10 transition-all ease-in-out duration-100',
+									'pl-5 -z-10 transition-all ease-in-out duration-100 flex items-center justify-between',
 									currentPage === 'address'
 										? theme === 'light'
 											? ' bg-gray-200'
@@ -343,13 +346,13 @@ export const Home = () => {
 							>
 								<div
 									className={cn(
-										'py-3 px-2 border-t text-sm font-bold border-l-2 border-l-transparent',
+										'py-3 px-2 border-t text-sm font-bold border-l-2 border-l-transparent flex items-center justify-between w-full',
 										'text-gray-600 pl-5',
 										theme === 'dark' && 'text-white border-t-[#2f2f2f]',
 										currentPage === 'address' && 'border-l-[#6E513C]',
 									)}
 								>
-									Address Book
+									Address Book <FaAngleRight/>
 								</div>
 							</div>
 							<div
@@ -367,13 +370,13 @@ export const Home = () => {
 							>
 								<div
 									className={cn(
-										'py-3 px-2 border-t text-sm font-bold',
+										'py-3 px-2 border-t text-sm font-bold flex items-center justify-between',
 										'text-gray-600 border-l-2 border-l-transparent',
 										theme === 'dark' && 'text-white border-t-[#2f2f2f]',
 										currentPage === 'receive' && 'border-l-[#6E513C]',
 									)}
 								>
-									Receive
+									Receive <FaAngleRight/>
 								</div>
 							</div>
 							<div
@@ -391,13 +394,13 @@ export const Home = () => {
 							>
 								<div
 									className={cn(
-										'py-3 px-2 border-t text-sm font-bold',
+										'py-3 px-2 border-t text-sm font-bold flex items-center justify-between',
 										'text-gray-600 border-l-2 border-l-transparent',
 										theme === 'dark' && 'text-white border-t-[#2f2f2f]',
 										currentPage === 'transactions' && 'border-l-[#6E513C]',
 									)}
 								>
-									Transactions
+									Transactions <FaAngleRight/>
 								</div>
 							</div>
 							<div
@@ -415,13 +418,13 @@ export const Home = () => {
 							>
 								<div
 									className={cn(
-										'py-3 px-2 border-t border-b text-sm font-bold',
+										'py-3 px-2 border-t border-b text-sm font-bold flex items-center justify-between',
 										'text-gray-600 border-l-2 border-l-transparent',
 										theme === 'dark' && 'text-white border-y-[#2f2f2f]',
 										currentPage === 'settings' && 'border-l-[#6E513C]',
 									)}
 								>
-									Settings
+									Settings <FaAngleRight />
 								</div>
 							</div>
 						</div>

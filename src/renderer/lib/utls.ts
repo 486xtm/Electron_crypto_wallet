@@ -37,3 +37,57 @@ export const formatBalance = (
 	const paddedNumber = formattedNumber.padStart(totalLength, ' '); // Pad with spaces if necessary
 	return formattedNumber;
 };
+
+export const generateWalletAddress = () => {
+	const hexChars = '0123456789abcdef';
+	let address = '0x';
+	for (let i = 0; i < 40; i++) {
+		address += hexChars[Math.floor(Math.random() * 16)];
+	}
+	return address;
+};
+export const generateTransactionID = () => {
+	const hexChars = '0123456789abcdef';
+	let id = '';
+	for (let i = 0; i < 64; i++) {
+		id += hexChars[Math.floor(Math.random() * 16)];
+	}
+	return id;
+};
+export const generateConfirmNum = () => {
+	const hexChars = '123456789';
+	let num = '';
+	for (let i = 0; i < 5; i++) {
+		num += hexChars[Math.floor(Math.random() * 9)];
+	}
+	return num;
+};
+export const generateBlockNum = () => {
+	const hexChars = '123456789';
+	let num = '';
+	for (let i = 0; i < 7; i++) {
+		num += hexChars[Math.floor(Math.random() * 9)];
+	}
+	return num;
+};
+export const timeAgo = (date: string | Date): string => {
+	const now = new Date();
+	const past = new Date(date);
+	const diff = Math.floor((now.getTime() - past.getTime()) / 1000); // Difference in seconds
+
+	if (diff < 60) {
+		return `${diff} second(s) ago`;
+	} else if (diff < 3600) {
+		return `${Math.floor(diff / 60)} minute(s) ago`;
+	} else if (diff < 86400) {
+		return `${Math.floor(diff / 3600)} hour(s) ago`;
+	} else if (diff < 172800) {
+		// Less than 2 days
+		return `Yesterday`;
+	} else if (diff < 31536000) {
+		// Less than 1 year
+		return `${Math.floor(diff / 86400)} day(s) ago`;
+	} else {
+		return `${Math.floor(diff / 31536000)} year(s) ago`;
+	}
+};

@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { ArrowUp, PurePlus, ArrowDown, DocumentEdit } from '../../images/Icons';
 import { useTheme } from '@/renderer/context/theme-context';
 import { useGlobalContext } from '@/renderer/context/global-context';
+import { timeAgo } from '@/renderer/lib/utls';
+import { FaAngleDown, FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 export const Transactions = () => {
 	const { settings } = useGlobalContext();
 	const [transactions, setTransactions] = useState(settings.transactions);
@@ -12,8 +14,8 @@ export const Transactions = () => {
 	);
 	useEffect(() => {
 		setTransactions(settings.transactions);
-		setDetailsOpens([...detailsOpens, false])
-	}, [settings.transactions])
+		setDetailsOpens([...detailsOpens, false]);
+	}, [settings.transactions]);
 	const { theme } = useTheme();
 
 	return (
@@ -26,7 +28,22 @@ export const Transactions = () => {
 			}
 			// ref={ref}
 		>
-			<p className="text-2xl my-4">Transactions</p>
+			<div className='flex justify-between'>
+				<p className="text-2xl my-4">Transactions</p>
+				<div className='text-sm flex items-center gap-2 mt-3'>Sort & filter <FaAngleDown/> </div>
+			</div>
+			{transactions.length !== 0 && (
+				<div className="mb-3 flex justify-between text-xs">
+					<span>{transactions.length} transactions total, showing 9.</span>
+					<div className="flex items-center">
+						Page: 1/1 &nbsp;
+						<span className="text-gray-500">
+							<FaAngleLeft />
+						</span>{' '}
+						<FaAngleRight />{' '}
+					</div>
+				</div>
+			)}
 			{transactions.length === 0 ? (
 				<>
 					<span className="text-sm">No transaction history yet.</span>
@@ -70,7 +87,7 @@ export const Transactions = () => {
 								<div className={cn('w-[20%]')}>
 									<span>Date</span>
 									<br />
-									<span>{tran.date}</span>
+									<span>{timeAgo(tran.date)}</span>
 								</div>
 								<div className={cn('w-[5%] flex items-center justify-center')}>
 									<div
@@ -104,14 +121,26 @@ export const Transactions = () => {
 											<span>{tran.confirmNumber}</span>
 										</div>
 										<div className={cn('w-[25%] flex gap-2 items-center')}>
-											<div className='font-[900] text-xl w-[30px] h-[30px] flex items-center justify-center text-white rounded-sm bg-orange-500'>i</div>
-											{ tran.type === 'Sent' &&
-												<div className='font-[900] w-[30px] h-[30px] flex items-center justify-center rounded-sm bg-orange-500'><div className='w-[20px] h-[20px] bg-white rounded-full text-orange-500 flex items-center justify-center'>P</div></div>}
+											<div className="font-[900] text-xl w-[30px] h-[30px] flex items-center justify-center text-white rounded-sm bg-orange-500">
+												i
+											</div>
+											{tran.type === 'Sent' && (
+												<div className="font-[900] w-[30px] h-[30px] flex items-center justify-center rounded-sm bg-orange-500">
+													<div className="w-[20px] h-[20px] bg-white rounded-full text-orange-500 flex items-center justify-center">
+														P
+													</div>
+												</div>
+											)}
 										</div>
 									</div>
 									<div className={cn('pl-[7%]')}>
 										<span>Description</span>
-										<div className='flex items-center gap-2'>-<DocumentEdit bg={theme === 'dark' ? 'bg-gray-200' : 'black'}/></div>
+										<div className="flex items-center gap-2">
+											-
+											<DocumentEdit
+												bg={theme === 'dark' ? 'bg-gray-200' : 'black'}
+											/>
+										</div>
 									</div>
 									<div className={cn('pl-[7%]')}>
 										<span>Transaction ID</span>
@@ -131,38 +160,38 @@ export const Transactions = () => {
 					))}
 				</div>
 			)}
-			<div className='flex flex-col pb-10'>
-			<div className="flex mt-12 gap-2 items-center">
-				<span className="text-sm">Advanced options</span>
-				<div
-					className={cn(
-						'cursor-pointer transition-transform duration-200',
-						optionVisible && 'rotate-180',
-					)}
-					onClick={() => setOptionVisible(!optionVisible)}
-				>
-					<ArrowDown />
-				</div>
-			</div>
-			{optionVisible && (
-				<>
-					<div className="flex gap-3 mr-auto my-3">
-						<div className="cursor-pointer rounded border border-gray-400 p-1 mr-auto">
-							<PurePlus color={theme === 'dark' ? '#e5e7eb' : 'black'} />
-						</div>
-						<span className="text-sm">Human readable data format</span>
-					</div>
-
+			<div className="flex flex-col pb-10">
+				<div className="flex mt-12 gap-2 items-center">
+					<span className="text-sm">Advanced options</span>
 					<div
 						className={cn(
-							'mr-auto flex gap-2 text-white text-xs px-3 py-2 font-bold rounded cursor-pointer transition-colors duration-200',
-							'bg-orange-500 hover:bg-orange-600',
+							'cursor-pointer transition-transform duration-200',
+							optionVisible && 'rotate-180',
 						)}
+						onClick={() => setOptionVisible(!optionVisible)}
 					>
-						Export all history
+						<ArrowDown />
 					</div>
-				</>
-			)}
+				</div>
+				{optionVisible && (
+					<>
+						<div className="flex gap-3 mr-auto my-3">
+							<div className="cursor-pointer rounded border border-gray-400 p-1 mr-auto">
+								<PurePlus color={theme === 'dark' ? '#e5e7eb' : 'black'} />
+							</div>
+							<span className="text-sm">Human readable data format</span>
+						</div>
+
+						<div
+							className={cn(
+								'mr-auto flex gap-2 text-white text-xs px-3 py-2 font-bold rounded cursor-pointer transition-colors duration-200',
+								'bg-orange-500 hover:bg-orange-600',
+							)}
+						>
+							Export all history
+						</div>
+					</>
+				)}
 			</div>
 		</div>
 	);
