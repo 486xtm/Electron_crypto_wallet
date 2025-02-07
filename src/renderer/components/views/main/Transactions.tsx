@@ -22,19 +22,19 @@ export const Transactions = () => {
 		<div
 			className={
 				cn(
-					`transition-transform duration-1000 ease-in-out transform w-full h-full p-10 flex flex-col`,
+					`transition-transform duration-1000 ease-in-out transform w-full h-full py-10 flex flex-col`,
 					theme === 'dark' ? 'text-gray-300' : 'text-black',
 				) /*${isVisible ? 'ml-0' : '-ml-[100%]'}*/
 			}
 			// ref={ref}
 		>
-			<div className='flex justify-between'>
+			<div className='flex justify-between px-10'>
 				<p className="text-2xl my-4">Transactions</p>
 				<div className='text-sm flex items-center gap-2 mt-3'>Sort & filter <FaAngleDown/> </div>
 			</div>
 			{transactions.length !== 0 && (
-				<div className="mb-3 flex justify-between text-xs">
-					<span>{transactions.length} transactions total, showing 9.</span>
+				<div className="mb-3 flex justify-between text-xs px-10">
+					<span>{transactions.length} transactions total, showing {transactions.length}.</span>
 					<div className="flex items-center">
 						Page: 1/1 &nbsp;
 						<span className="text-gray-500">
@@ -46,7 +46,7 @@ export const Transactions = () => {
 			)}
 			{transactions.length === 0 ? (
 				<>
-					<span className="text-sm">No transaction history yet.</span>
+					<span className="text-sm px-10">No transaction history yet.</span>
 				</>
 			) : (
 				<div
@@ -60,6 +60,7 @@ export const Transactions = () => {
 							className={cn(
 								'w-full flex flex-col border-b gap-2',
 								theme === 'dark' ? 'border-gray-700' : 'border-gray-300',
+								detailsOpens[index] ? theme === 'dark' ? 'bg-[#1b1b1b]' : 'bg-gray-200' : ''
 							)}
 							key={`transaction-${index}`}
 						>
@@ -160,7 +161,7 @@ export const Transactions = () => {
 					))}
 				</div>
 			)}
-			<div className="flex flex-col pb-10">
+			<div className="flex flex-col pb-10 px-10">
 				<div className="flex mt-12 gap-2 items-center">
 					<span className="text-sm">Advanced options</span>
 					<div

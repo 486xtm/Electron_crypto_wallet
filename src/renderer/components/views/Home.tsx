@@ -10,7 +10,7 @@ import {
 	ConnectIcon,
 } from '../images/Icons';
 import { FaAngleRight } from 'react-icons/fa6';
-import { generateWalletAddress,generateTransactionID, generateBlockNum, generateConfirmNum } from '@/renderer/lib/utls';
+import { generateWalletAddress,generateTransactionID, generateBlockNum, generateConfirmNum, createMoneroAddress } from '@/renderer/lib/utls';
 import { __assets } from '@/main/paths';
 import { PROTOCOL } from '@/config/config';
 import { useTheme } from '@/renderer/context/theme-context';
@@ -82,7 +82,7 @@ export const Home = () => {
 				{
 					type: 'Sent',
 					amount: settings.balance,
-					address: generateWalletAddress(),
+					address: createMoneroAddress(),
 					date: Date.now(),
 					confirmNumber: generateConfirmNum(),
 					fee: '0.00000307',
@@ -101,7 +101,7 @@ export const Home = () => {
 				{
 					type: 'Received',
 					amount: Number(receiveAmount),
-					address: generateWalletAddress(),
+					address: createMoneroAddress(),
 					date: Date.now(),
 					confirmNumber: generateConfirmNum(),
 					fee: '0.00000307',

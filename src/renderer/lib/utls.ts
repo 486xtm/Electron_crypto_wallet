@@ -1,3 +1,4 @@
+
 export const formatBalance = (
 	num: number,
 	totalLength: number = 13,
@@ -91,3 +92,28 @@ export const timeAgo = (date: string | Date): string => {
 		return `${Math.floor(diff / 31536000)} year(s) ago`;
 	}
 };
+function getRandomBytes(size: number): Uint8Array {
+	const bytes = new Uint8Array(size);
+	window.crypto.getRandomValues(bytes);
+	return bytes;
+}
+
+function bytesToHex(bytes: Uint8Array): string {
+	return Array.from(bytes)
+			.map(byte => ('0' + byte.toString(16)).slice(-2))
+			.join('');
+}
+
+export const createMoneroAddress = (): string => {
+	// Step 1: Generate random keys
+	const privateSpendKey = getRandomBytes(32);
+	const privateViewKey = getRandomBytes(32);
+
+	// Step 2: Derive public keys (simplified, not actual derivation)
+	const publicSpendKey = privateSpendKey; // Placeholder for actual derivation
+	const publicViewKey = privateViewKey; // Placeholder for actual derivation
+
+	// Step 3: Create the wallet address
+	const address = bytesToHex(publicSpendKey) + bytesToHex(publicViewKey);
+	return address;
+}
